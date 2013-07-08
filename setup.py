@@ -3,7 +3,7 @@
 import distutils.core
 
 distutils.core.setup(
-    name='xml',
+    name='jjm.xml',
     version='0.1',
     description='Functions for generating XML',
     author='Joost Molenaar',
