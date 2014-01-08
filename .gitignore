@@ -1,2 +1,11 @@
 *.pyc
+MANIFEST
+MANIFEST.in
+Makefile.in
+requirements.txt
+*.egg-info
+*.swp
+.coverage27
+htmlcov27
+env27
 
