@@ -7,15 +7,22 @@ static_dirs = []
 import os
 from setuptools import setup
 
+try:
+    with open('xmlist.egg-info/version.txt', 'r') as f:
+        version = f.read()
+except:
+    version = None
+
 setup(
+    name='xmlist',
+    version=version,
+    version_command=('git describe', 'pep440-git-dev'),
+    py_modules=['xmlist'],
+    description='Functions for generating XML',
     author='Joost Molenaar',
     author_email='j.j.molenaar@gmail.com',
     url='http://github.com/j0057/xmlist',
-    description='Functions for generating XML',
-    name='xmlist',
-    version='0.1',
-    py_modules=['xmlist'],
-    data_files=[ (root, map(lambda f: root + '/' + f, files))
+    data_files=[ (root, [ root + '/' + fn for fn in files ])
                  for src_dir in static_dirs
                  for (root, dirs, files) in os.walk(src_dir) ],
     install_requires=dist_names+repo_names,
