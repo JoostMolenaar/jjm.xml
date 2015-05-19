@@ -1,12 +1,11 @@
 #!/usr/bin/env python2.7
 
-static_dirs = []
-install_requires = []
-tests_require = ['pytest', 'pytest-cov', 'coverage']
-
 import os
 import setuptools
 import setuptools.command.test
+
+os.environ['HTTP_PROXY']  = '127.0.0.1:65534'
+os.environ['HTTPS_PROXY'] = '127.0.0.1:65535'
 
 class PyTest(setuptools.command.test.test):
     def initialize_options(self):
@@ -19,7 +18,7 @@ class PyTest(setuptools.command.test.test):
 
     def run_tests(self):
         import pytest
-        pytest.main('tests --cov-report html --cov-report term --cov xmlist --cov-config .coveragerc'.split())
+        pytest.main(['-c', 'setup.cfg'])
 
 def try_read_file(filename):
     try:
@@ -27,21 +26,29 @@ def try_read_file(filename):
             return f.read()
     except: pass
 
-setuptools.setup(
-    name='xmlist',
-    version=try_read_file('xmlist.egg-info/version.txt'),
-    version_command=('git describe', 'pep440-git'),
-    py_modules=['xmlist'],
-    description='Functions for generating XML',
-    author='Joost Molenaar',
-    author_email='j.j.molenaar@gmail.com',
-    url='http://github.com/j0057/xmlist',
-    install_requires=install_requires,
-    tests_require=tests_require,
-    custom_metadata={
-        'x_static_dirs': static_dirs
-    },
-    data_files=[ (root, [ root + '/' + fn for fn in files ])
-                 for src_dir in static_dirs
-                 for (root, dirs, files) in os.walk(src_dir) ],
-    cmdclass = { 'test': PyTest })
+setuptools.setup(**{
+    'name': 'xmlist',
+    'description': 'Functions for generating XML',
+
+    'version': try_read_file('xmlist.egg-info/version.txt'),
+    'version_command': ('git describe', 'pep440-git'),
+
+    'url': 'http://github.com/j0057/xmlist',
+    'author': 'Joost Molenaar',
+    'author_email': 'j.j.molenaar@gmail.com',
+
+    'py_modules': ['xmlist'],
+
+    'install_requires': [],
+    'setup_requires': [
+        'setuptools-version-command', 
+        'setuptools-metadata'
+    ],
+    'tests_require': [
+        'pytest',
+        'pytest-cov',
+        'pytest-flakes'
+    ],
+
+    'cmdclass': { 'test': PyTest }
+})

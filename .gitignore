@@ -1,5 +1,6 @@
-env
+env*
 *.pyc
 *.egg-info
+.cache
 .coverage
 htmlcov

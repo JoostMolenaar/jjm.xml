@@ -1,7 +1,6 @@
-import re
 import sys
 
-if sys.version_info[0] == 3:
+if sys.version_info[0] == 3: # pragma: no cover
     unicode = str
     long = int
 
@@ -15,7 +14,6 @@ dtd = {
     u'XHTML 1.0 Frameset':  u'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">',
     u'XHTML 1.1':           u'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'
 }
-
 
 def PROCINC(L): 
     return u'<?%s?>' % u' '.join(serialize(n) for n in L)
