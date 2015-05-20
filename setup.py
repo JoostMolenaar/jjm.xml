@@ -41,8 +41,7 @@ setuptools.setup(**{
 
     'install_requires': [],
     'setup_requires': [
-        'setuptools-version-command', 
-        'setuptools-metadata'
+        'setuptools-version-command'
     ],
     'tests_require': [
         'pytest',
