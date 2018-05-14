@@ -4,3 +4,6 @@ env*
 .cache
 .coverage
 htmlcov
+.eggs
+.pytest_cache
+dist
