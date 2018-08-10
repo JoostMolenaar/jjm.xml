@@ -55,7 +55,7 @@ HTMLEMPTY = u'base link meta hr br embed param area col input'.split(' ')
 #       if is_element(child):
 #           insert_ws(child, level+1)
 
-def insert_ws(node, level=0, char=u'\t'):
+def insert_ws(node, level=0, char='\t'):
     is_text = lambda n: isinstance(n, str) or isinstance(n, unicode) or \
                         isinstance(n, int) or isinstance(n, long)
     is_elem = lambda n: isinstance(n, list) and is_text(n[0])
@@ -143,18 +143,18 @@ def serialize_ex(node, mode):
     else:
         raise ValueError(repr(node))
 
-def serialize_ws_xml(node):
-    return serialize_ws_ex(node, MODE_XML)
+def serialize_ws_xml(node, indent='\t'):
+    return serialize_ws_ex(node, MODE_XML, indent)
 
-def serialize_ws_html(node):
-    return serialize_ws_ex(node, MODE_HTML)
+def serialize_ws_html(node, indent='\t'):
+    return serialize_ws_ex(node, MODE_HTML, indent)
 
-def serialize_ws(node):
+def serialize_ws(node, indent='\t'): # pragma: no cover
     warnings.warn("xmlist.serialize_ws is deprecated, please use serialize_ws_xml or serialize_ws_html instead")
-    return serialize_ws_ex(node, MODE)
+    return serialize_ws_ex(node, MODE, indent)
 
-def serialize_ws_ex(node, mode):
-    insert_ws(node)
+def serialize_ws_ex(node, mode, indent='\t'):
+    insert_ws(node, char=indent)
     return serialize_ex(node, mode)
 
 # <?procinc attr="?>"?>     PROCINC_START NAME WS NAME WS EQ DQ PROCINC_END
