@@ -102,8 +102,11 @@ def test_serialize_ws_xml_fragment_2():
         == '<spam>\n\t<albatross/>\n\t<albatross inquisition="spanish"/>\n</spam>'
 
 def test_serialize_ws_html_procins():
-    assert xmlist.serialize_ws_html(['p', 'a', [xmlist.PROCINS, 'spam', 'albatross', 'foo'], 'b']) \
-        == '<p>\n\ta\n\t<?spam albatross foo?>\n\tb\n</p>'
+    assert xmlist.serialize_ws_html(['p', 'a', [xmlist.PROCINS, 'spam', 'albatross', 'foo', 'bar'], 'b']) \
+        == '<p>\n\ta\n\t<?spam albatross foo bar?>\n\tb\n</p>'
+
+def test_serialize_ws_html_procins_2():
+    assert xmlist.serialize_ws_html([xmlist.PROCINS, 'foo', 'bar']) == '<?foo bar?>'
 
 def test_serialize_ws_html_elem():
     assert xmlist.serialize_ws_html(['body', ['p', 'a', ['br'], 'b']]) \
