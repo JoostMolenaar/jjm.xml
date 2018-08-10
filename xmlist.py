@@ -127,7 +127,7 @@ def serialize_ex(node, mode):
                 return u'<%s%s%s/>' % (name, space, attrs)
 
         else:
-            raise ValueError(u'mode %s not recognized' % MODE)
+            raise ValueError(u'mode %r not recognized' % mode)
 
     # some crazy other type of node like doctype, processing instruction or comment
     elif isinstance(node, list) and callable(node[0]):
