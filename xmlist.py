@@ -61,12 +61,12 @@ def insert_ws(node, level=0, char=u'\t'):
     is_elem = lambda n: isinstance(n, list) and is_text(n[0])
     is_attr = lambda n: isinstance(n, tuple)
     is_frag = lambda n: isinstance(n, list) and (n[0] == FRAGMENT)
-    is_procinc = lambda n: isinstance(n, list) and (n[0] == PROCINC)
+    is_procins = lambda n: isinstance(n, list) and (n[0] in [PROCINC, PROCINS])
     is_empty = lambda n: is_elem(n) and all(is_attr(ch) for ch in n[1:])
     node_no_attr = [ch for ch in node if not is_attr(ch)]
-    if is_elem(node) and len(node_no_attr) == 2 and is_text(node_no_attr[1]):
+    if is_procins(node):
         return
-    if is_procinc(node):
+    if is_elem(node) and len(node_no_attr) == 2 and is_text(node_no_attr[1]):
         return
     if is_frag(node):
         for n in node[1:]:

@@ -60,7 +60,7 @@ def test_serialize_wrong():
 #
 
 def test_serialize_xml_procins():
-    assert xmlist.serialize_xml(['spam', [xmlist.PROCINC, 'albatross', ('spanish_inquisition', 'unexpected')]]) \
+    assert xmlist.serialize_xml(['spam', [xmlist.PROCINS, 'albatross', ('spanish_inquisition', 'unexpected')]]) \
         == '<spam><?albatross spanish_inquisition="unexpected"?></spam>'
 
 def test_serialize_xml_fragment():
@@ -91,7 +91,7 @@ def test_serialize_ws_xml_text():
     assert xmlist.serialize_ws_xml(['spam', 'albatross']) == '<spam>albatross</spam>'
 
 def test_serialize_ws_xml_procins():
-    assert xmlist.serialize_ws_xml(['foo', [xmlist.PROCINC, 'a', ('b', 'c')]]) == '<foo>\n\t<?a b="c"?>\n</foo>'
+    assert xmlist.serialize_ws_xml(['foo', [xmlist.PROCINS, 'a', ('b', 'c')]]) == '<foo>\n\t<?a b="c"?>\n</foo>'
 
 def test_serialize_ws_xml_fragment():
     assert xmlist.serialize_ws_xml(['foo', ['quux', [xmlist.FRAGMENT, ['bar']]]]) \
