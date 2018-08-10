@@ -9,41 +9,41 @@ if sys.version_info[0] == 3: # pragma: no cover
     long = int
 
 dtd = {
-    u'HTML 4.01 Strict':    u'<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">',
-    u'HTML 4.01 Loose':     u'<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">',
-    u'HTML 4.01 Frameset':  u'<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">',
-    u'HTML 5':              u'<!DOCTYPE html>',
-    u'XHTML 1.0 Strict':    u'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">',
-    u'XHTML 1.0 Loose':     u'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
-    u'XHTML 1.0 Frameset':  u'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">',
-    u'XHTML 1.1':           u'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'
+    'HTML 4.01 Strict':    '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">',
+    'HTML 4.01 Loose':     '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">',
+    'HTML 4.01 Frameset':  '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">',
+    'HTML 5':              '<!DOCTYPE html>',
+    'XHTML 1.0 Strict':    '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">',
+    'XHTML 1.0 Loose':     '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
+    'XHTML 1.0 Frameset':  '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">',
+    'XHTML 1.1':           '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'
 }
 
 def PROCINS(mode, L):
-    return u'<?%s?>' % u' '.join(serialize_ex(n, mode) for n in L)
+    return '<?%s?>' % ' '.join(serialize_ex(n, mode) for n in L)
 
 def PROCINC(mode, L): # pragma: no cover
     warnings.warn('xmlist.PROCINC is deprecated; use xmlist.PROCINS instead')
     return PROCINS(mode, L)
 
 def CDATA(mode, L):
-    return u'<![CDATA[%s]]>' % u''.join(L)
+    return '<![CDATA[%s]]>' % ''.join(L)
 
 def COMMENT(mode, L):
-    return u'<!--%s-->' % u''.join(L)
+    return '<!--%s-->' % ''.join(L)
 
 def FRAGMENT(mode, L):
-    return u''.join(serialize_ex(n, mode) for n in L)
+    return ''.join(serialize_ex(n, mode) for n in L)
 
 def DOCTYPE(mode, L):
-    return dtd[L[0]] + u'\n'
+    return dtd[L[0]] + '\n'
 
 MODE_HTML = object()
 MODE_XML = object()
 
 MODE = MODE_XML
 
-HTMLEMPTY = u'base link meta hr br embed param area col input'.split(' ')
+HTMLEMPTY = 'base link meta hr br embed param area col input'.split(' ')
 
 # insert_ws(node, level=0)
 #   if is_element(node) and has_1_child and child[0] is text:
@@ -74,9 +74,9 @@ def insert_ws(node, level=0, char='\t'):
         return
     for i in range(len(node)-1, 0, -1):
         if not is_attr(node[i]):
-            node.insert(i, u'\n' + char * (level + 1))
+            node.insert(i, '\n' + char * (level + 1))
     if not is_empty(node):
-        node.append(u'\n' + char * level)
+        node.append('\n' + char * level)
     for i in range(len(node)-1, 0, -1):
         if is_elem(node[i]):
             insert_ws(node[i], level + 1, char)
@@ -92,14 +92,14 @@ def serialize(node): # pragma: no cover
     return serialize_ex(node, MODE)
 
 def serialize_ex(node, mode):
-    entities = u'&amp "quot <lt >gt' \
+    entities = '&amp "quot <lt >gt' \
                if MODE == MODE_HTML \
-               else u'&amp "quot \'apos <lt >gt'
+               else '&amp "quot \'apos <lt >gt'
 
     # text node
     if isinstance(node, str) or isinstance(node, unicode): 
-        for r in entities.split(u' '):
-            node = node.replace(r[0], u'&'+r[1:]+u';')
+        for r in entities.split(' '):
+            node = node.replace(r[0], '&'+r[1:]+';')
         return node
 
     # text node
@@ -108,32 +108,32 @@ def serialize_ex(node, mode):
 
     # attribute node
     elif isinstance(node, tuple): 
-        return u'%s="%s"' % (node[0], serialize_ex(node[1], mode))
+        return '%s="%s"' % (node[0], serialize_ex(node[1], mode))
 
     # element node
     if isinstance(node, list) and (isinstance(node[0], str) or isinstance(node[0], unicode)):
         name = node[0]
         nodes = [ (isinstance(n, tuple), serialize_ex(n, mode)) for n in node[1:] if n ]
-        attrs = u' '.join(n for (isattr, n) in nodes if isattr)
-        elems =  u''.join(n for (isattr, n) in nodes if not isattr)
-        space = u' ' if attrs else u''
+        attrs = ' '.join(n for (isattr, n) in nodes if isattr)
+        elems =  ''.join(n for (isattr, n) in nodes if not isattr)
+        space = ' ' if attrs else ''
 
         if mode == MODE_HTML:
             if name in HTMLEMPTY:
                 if elems:
-                    raise ValueError(u'%s not empty' % name)
-                return u'<%s%s%s>' % (name, space, attrs)
+                    raise ValueError('%s not empty' % name)
+                return '<%s%s%s>' % (name, space, attrs)
             else:
-                return u'<%s%s%s>%s</%s>' % (name, space, attrs, elems, name)
+                return '<%s%s%s>%s</%s>' % (name, space, attrs, elems, name)
 
         elif mode == MODE_XML:
             if elems:
-                return u'<%s%s%s>%s</%s>' % (name, space, attrs, elems, name)
+                return '<%s%s%s>%s</%s>' % (name, space, attrs, elems, name)
             else:
-                return u'<%s%s%s/>' % (name, space, attrs)
+                return '<%s%s%s/>' % (name, space, attrs)
 
         else:
-            raise ValueError(u'mode %r not recognized' % mode)
+            raise ValueError('mode %r not recognized' % mode)
 
     # some crazy other type of node like doctype, processing instruction or comment
     elif isinstance(node, list) and callable(node[0]):
