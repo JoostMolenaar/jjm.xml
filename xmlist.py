@@ -49,7 +49,7 @@ HTMLEMPTY = u'base link meta hr br embed param area col input'.split(' ')
 #       if is_element(child):
 #           insert_ws(child, level+1)
 
-def insert_ws(node, level=0, char=u'    '):
+def insert_ws(node, level=0, char=u'\t'):
     is_text = lambda n: isinstance(n, str) or isinstance(n, unicode) or \
                         isinstance(n, int) or isinstance(n, long)
     is_elem = lambda n: isinstance(n, list) and is_text(n[0])
