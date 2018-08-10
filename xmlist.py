@@ -87,7 +87,7 @@ def serialize_xml(node):
 def serialize_html(node):
     return serialize_ex(node, MODE_HTML)
 
-def serialize(node):
+def serialize(node): # pragma: no cover
     warnings.warn("xmlist.serialize is deprecated, please use serialize_xml or serialize_html instead")
     return serialize_ex(node, MODE)
 
