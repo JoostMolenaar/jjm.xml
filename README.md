@@ -1,6 +1,6 @@
 # xmlist
 
-`xmlist` is a module for generating XNL, which it represents by lists and tuples.
+`xmlist` is a module for generating XML, which it represents by lists and tuples.
 
 ## using xmlist
 
