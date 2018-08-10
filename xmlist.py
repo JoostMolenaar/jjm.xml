@@ -1,3 +1,5 @@
+
+import warnings
 import sys
 
 if sys.version_info[0] == 3: # pragma: no cover
@@ -15,19 +17,19 @@ dtd = {
     u'XHTML 1.1':           u'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'
 }
 
-def PROCINC(L): 
-    return u'<?%s?>' % u' '.join(serialize(n) for n in L)
+def PROCINC(mode, L):
+    return u'<?%s?>' % u' '.join(serialize_ex(n, mode) for n in L)
 
-def CDATA(L): 
+def CDATA(mode, L):
     return u'<![CDATA[%s]]>' % u''.join(L)
 
-def COMMENT(L): 
+def COMMENT(mode, L):
     return u'<!--%s-->' % u''.join(L)
 
-def FRAGMENT(L): 
-    return u''.join(serialize(n) for n in L)
+def FRAGMENT(mode, L):
+    return u''.join(serialize_ex(n, mode) for n in L)
 
-def DOCTYPE(L): 
+def DOCTYPE(mode, L):
     return dtd[L[0]] + u'\n'
 
 MODE_HTML = object()
@@ -73,7 +75,17 @@ def insert_ws(node, level=0, char=u'    '):
         if is_elem(node[i]):
             insert_ws(node[i], level + 1, char)
 
+def serialize_xml(node):
+    return serialize_ex(node, MODE_XML)
+
+def serialize_html(node):
+    return serialize_ex(node, MODE_HTML)
+
 def serialize(node):
+    warnings.warn("xmlist.serialize is deprecated, please use serialize_xml or serialize_html instead")
+    return serialize_ex(node, MODE)
+
+def serialize_ex(node, mode):
     entities = u'&amp "quot <lt >gt' \
                if MODE == MODE_HTML \
                else u'&amp "quot \'apos <lt >gt'
@@ -90,17 +102,17 @@ def serialize(node):
 
     # attribute node
     elif isinstance(node, tuple): 
-        return u'%s="%s"' % (node[0], serialize(node[1]))
+        return u'%s="%s"' % (node[0], serialize_ex(node[1], mode))
 
     # element node
     if isinstance(node, list) and (isinstance(node[0], str) or isinstance(node[0], unicode)):
         name = node[0]
-        nodes = [ (isinstance(n, tuple), serialize(n)) for n in node[1:] if n ]
+        nodes = [ (isinstance(n, tuple), serialize_ex(n, mode)) for n in node[1:] if n ]
         attrs = u' '.join(n for (isattr, n) in nodes if isattr)
         elems =  u''.join(n for (isattr, n) in nodes if not isattr)
         space = u' ' if attrs else u''
 
-        if MODE == MODE_HTML:
+        if mode == MODE_HTML:
             if name in HTMLEMPTY:
                 if elems:
                     raise ValueError(u'%s not empty' % name)
@@ -108,7 +120,7 @@ def serialize(node):
             else:
                 return u'<%s%s%s>%s</%s>' % (name, space, attrs, elems, name)
 
-        elif MODE == MODE_XML:
+        elif mode == MODE_XML:
             if elems:
                 return u'<%s%s%s>%s</%s>' % (name, space, attrs, elems, name)
             else:
@@ -119,15 +131,25 @@ def serialize(node):
 
     # some crazy other type of node like doctype, processing instruction or comment
     elif isinstance(node, list) and callable(node[0]):
-        return node[0](node[1:])
+        return node[0](mode, node[1:])
 
     # aah! wtf are you doing
     else:
         raise ValueError(repr(node))
 
+def serialize_ws_xml(node):
+    return serialize_ws_ex(node, MODE_XML)
+
+def serialize_ws_html(node):
+    return serialize_ws_ex(node, MODE_HTML)
+
 def serialize_ws(node):
+    warnings.warn("xmlist.serialize_ws is deprecated, please use serialize_ws_xml or serialize_ws_html instead")
+    return serialize_ws_ex(node, MODE)
+
+def serialize_ws_ex(node, mode):
     insert_ws(node)
-    return serialize(node)
+    return serialize_ex(node, mode)
 
 # <?procinc attr="?>"?>     PROCINC_START NAME WS NAME WS EQ DQ PROCINC_END
 # <![CDATA[<text>]]>        CDATA_START CDATA
