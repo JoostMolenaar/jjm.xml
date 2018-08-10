@@ -22,7 +22,7 @@ dtd = {
 def PROCINS(mode, L):
     return u'<?%s?>' % u' '.join(serialize_ex(n, mode) for n in L)
 
-def PROCINC(mode, L):
+def PROCINC(mode, L): # pragma: no cover
     warnings.warn('xmlist.PROCINC is deprecated; use xmlist.PROCINS instead')
     return PROCINS(mode, L)
 
