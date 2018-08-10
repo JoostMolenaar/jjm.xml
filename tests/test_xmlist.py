@@ -59,7 +59,7 @@ def test_serialize_wrong():
 # Feed Me Weird Things (tm)
 #
 
-def test_serialize__xml_procins():
+def test_serialize_xml_procins():
     assert xmlist.serialize_xml(['spam', [xmlist.PROCINC, 'albatross', ('spanish_inquisition', 'unexpected')]]) \
         == '<spam><?albatross spanish_inquisition="unexpected"?></spam>'
 

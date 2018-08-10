@@ -19,8 +19,12 @@ dtd = {
     u'XHTML 1.1':           u'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'
 }
 
-def PROCINC(mode, L):
+def PROCINS(mode, L):
     return u'<?%s?>' % u' '.join(serialize_ex(n, mode) for n in L)
+
+def PROCINC(mode, L):
+    warnings.warn('xmlist.PROCINC is deprecated; use xmlist.PROCINS instead')
+    return PROCINS(mode, L)
 
 def CDATA(mode, L):
     return u'<![CDATA[%s]]>' % u''.join(L)
