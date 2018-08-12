@@ -45,15 +45,6 @@ MODE = MODE_XML
 
 HTMLEMPTY = 'base link meta hr br embed param area col input'.split(' ')
 
-# insert_ws(node, level=0)
-#   if is_element(node) and has_1_child and child[0] is text:
-#       return
-#   for child in node[1:]:
-#       prepend level+1 tabs
-#   append level tabs
-#   for child in child[1:]:
-#       if is_element(child):
-#           insert_ws(child, level+1)
 
 def insert_ws(node, level=0, char='\t'):
     is_text = lambda n: isinstance(n, str) or isinstance(n, unicode) or \
@@ -156,63 +147,3 @@ def serialize_ws(node, indent='\t'): # pragma: no cover
 def serialize_ws_ex(node, mode, indent='\t'):
     insert_ws(node, char=indent)
     return serialize_ex(node, mode)
-
-# <?procinc attr="?>"?>     PROCINC_START NAME WS NAME WS EQ DQ PROCINC_END
-# <![CDATA[<text>]]>        CDATA_START CDATA
-# <!--comment<foo>-->       COMMENT_START COMMENT COMMENT_END
-# <elem/>                   LB NAME CRB
-# <elem attr="/>"/>         LB NAME WS ATTRNAME EQUALS ATTRVALUE CRB
-# <elem attr=">">foo &amp; bar</elem>
-# <elem></elem>             LB NAME CB CLB NAME CRB
-# foo &amp; bar             TEXT
-
-#def parse(xml):
-#    def parse(text, *rules):
-#        for expr, tokenize in rules:
-#            match = re.match(expr, xml, re.MULTILINE | re.DOTALL)
-#            if match:
-#                return tokenize(match.groups())
-#
-#    parse_elem = lambda xml: []
-#    parse_node = lambda xml: parse(xml,
-#                                   ('^<\?(.+?)\?>(.*)',          lambda m: [PROCINC] + parse_elem(m[0])),
-#                                   ('^<!\[CDATA\[(.*?)]]>(.*)',  lambda m: [CDATA, m[0]]),
-#                                   ('^<!--(.*?)-->(.*)',         lambda m: [COMMENT, m[0]]))
-#
-#    return parse_node(xml)
-
-#if __name__ == '__main__':
-#    doc = ['html',
-#           ['head',
-#            ['title', 'test document'],
-#          ['link', ('rel', 'stylesheet'), ('type', 'text/css'), ('href', 'style.css')]],
-#           ['body',
-#            ['h1', 'test document'],
-#            ['p', 'hi there', ['br'], 'this is a test'],
-#            ['ul',
-#             ['li', ['a', ('href', '/item1'), 'item 1']],
-#             ['li', 'item 2'],
-#             ['li', 'item 3']]]]
-#    doc = ['html',
-#           ['head'],
-#           ['body',
-#            ['div', ('id', 'Menu'),
-#             [FRAGMENT,
-#              ['h1', 'menu'],
-#              ['ul', ('id', 'MenuList'),
-#               ['li', ['a', ('href', '/release'), 'Releases']],
-#               ['li', ['a', ('href', '/artist'), 'Artists']]]]]]]
-#    doc = [FRAGMENT, [DOCTYPE, 'HTML 5'], doc]
-#    MODE = MODE_HTML
-#    print serialize(doc)
-#    print
-#    MODE = MODE_XML
-#    print serialize(doc)
-#    print
-#    insert_ws(doc[2])
-#    MODE = MODE_HTML
-#    print serialize(doc)
-#    print
-#    MODE = MODE_XML
-#    print serialize(doc)
-#    print
