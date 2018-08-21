@@ -8,7 +8,30 @@ if sys.version_info[0] == 3: # pragma: no cover
     unicode = str
     long = int
 
-dtd = {
+class DTD(object):
+
+    html401 = ('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"' ' "http://www.w3.org/TR/html4/strict.dtd">')
+
+    html401_loose = ('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"'
+                     ' "http://www.w3.org/TR/html4/loose.dtd">')
+
+    html401_frameset = ('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"'
+                        ' "http://www.w3.org/TR/html4/frameset.dtd">')
+
+    html5 = ('<!DOCTYPE html>')
+
+    xhtml10 = ('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"'
+               ' "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">')
+
+    xhtml10_loose = ('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"'
+                     ' "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">')
+
+    xhtml10_frameset = ('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"'
+                        ' "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">')
+
+    xhtml11 = ('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"' ' "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'),
+
+dtd = type('DeprecatedDict', (dict, ), {'__getitem__': lambda self, k: warnings.warn('xmlist.dtd is deprecated; use xmlist.DTD instead') or dict.__getitem__(self, k)})({
     'HTML 4.01 Strict':    '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">',
     'HTML 4.01 Loose':     '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">',
     'HTML 4.01 Frameset':  '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">',
@@ -17,7 +40,7 @@ dtd = {
     'XHTML 1.0 Loose':     '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
     'XHTML 1.0 Frameset':  '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">',
     'XHTML 1.1':           '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'
-}
+})
 
 def PROCINS(mode, L):
     return '<?%s?>' % ' '.join(serialize_ex(n, mode) for n in L)
