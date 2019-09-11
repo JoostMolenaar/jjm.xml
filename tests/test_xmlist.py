@@ -75,7 +75,11 @@ def test_serialize_xml_cdata():
     assert xmlist.serialize_xml(['spam', [xmlist.CDATA, '<albatross/>']]) == '<spam><![CDATA[<albatross/>]]></spam>'
 
 def test_serialize_xml_doctype():
-    assert xmlist.serialize_xml([xmlist.FRAGMENT, [xmlist.DOCTYPE, 'HTML 5'], ['html']]) == '<!DOCTYPE html>\n<html/>'
+    assert xmlist.serialize_xml([xmlist.FRAGMENT, [xmlist.DOCTYPE, 'html5'], ['html']]) == '<!DOCTYPE html>\n<html/>'
+
+def test_serialize_xml_doctype_deprecated():
+    with pytest.warns(UserWarning):
+        assert xmlist.serialize_xml([xmlist.FRAGMENT, [xmlist.DOCTYPE, 'HTML 5'], ['html']]) == '<!DOCTYPE html>\n<html/>'
 
 def test_serialize_xml_wtf_are_you_doing():
     with pytest.raises(ValueError) as exc:

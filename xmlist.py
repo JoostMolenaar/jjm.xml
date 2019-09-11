@@ -32,14 +32,14 @@ class DTD(object):
     xhtml11 = ('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"' ' "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'),
 
 dtd = type('DeprecatedDict', (dict, ), {'__getitem__': lambda self, k: warnings.warn('xmlist.dtd is deprecated; use xmlist.DTD instead') or dict.__getitem__(self, k)})({
-    'HTML 4.01 Strict':    '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">',
-    'HTML 4.01 Loose':     '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">',
-    'HTML 4.01 Frameset':  '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">',
-    'HTML 5':              '<!DOCTYPE html>',
-    'XHTML 1.0 Strict':    '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">',
-    'XHTML 1.0 Loose':     '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
-    'XHTML 1.0 Frameset':  '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">',
-    'XHTML 1.1':           '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'
+    'HTML 4.01 Strict':    DTD.html401,
+    'HTML 4.01 Loose':     DTD.html401_loose,
+    'HTML 4.01 Frameset':  DTD.html401_frameset,
+    'HTML 5':              DTD.html5,
+    'XHTML 1.0 Strict':    DTD.xhtml10,
+    'XHTML 1.0 Loose':     DTD.xhtml10_loose,
+    'XHTML 1.0 Frameset':  DTD.xhtml10_frameset,
+    'XHTML 1.1':           DTD.xhtml11
 })
 
 def PROCINS(mode, L):
@@ -59,7 +59,11 @@ def FRAGMENT(mode, L):
     return ''.join(serialize_ex(n, mode) for n in L)
 
 def DOCTYPE(mode, L):
-    return dtd[L[0]] + '\n'
+    try:
+        return getattr(DTD, L[0]) + '\n'
+    except AttributeError:
+        return dtd[L[0]] + '\n'
+
 
 MODE_HTML = object()
 MODE_XML = object()
