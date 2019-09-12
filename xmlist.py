@@ -1,6 +1,6 @@
 '''Functions for generating XML/HTML'''
 
-__version__ = '0.99999'
+__version__ = '1.0'
 
 import warnings
 
