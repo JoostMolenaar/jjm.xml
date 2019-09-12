@@ -1,5 +1,7 @@
+'''Functions for generating XML/HTML'''
 
 from __future__ import unicode_literals
+__version__ = '0.99999'
 
 import warnings
 import sys
