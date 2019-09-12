@@ -7,3 +7,4 @@ htmlcov
 .eggs
 .pytest_cache
 dist
+.tox
