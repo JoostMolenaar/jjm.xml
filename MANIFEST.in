@@ -1,2 +1,0 @@
-recursive-include tests *.*
-include README.md
