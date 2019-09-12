@@ -1,14 +1,8 @@
 '''Functions for generating XML/HTML'''
 
-from __future__ import unicode_literals
 __version__ = '0.99999'
 
 import warnings
-import sys
-
-if sys.version_info[0] == 3: # pragma: no cover
-    unicode = str
-    long = int
 
 class DTD(object):
 
@@ -76,8 +70,7 @@ HTMLEMPTY = 'base link meta hr br embed param area col input'.split(' ')
 
 
 def insert_ws(node, level=0, char='\t'):
-    is_text = lambda n: isinstance(n, str) or isinstance(n, unicode) or \
-                        isinstance(n, int) or isinstance(n, long)
+    is_text = lambda n: isinstance(n, str) or isinstance(n, int)
     is_elem = lambda n: isinstance(n, list) and is_text(n[0])
     is_attr = lambda n: isinstance(n, tuple)
     is_frag = lambda n: isinstance(n, list) and (n[0] == FRAGMENT)
@@ -117,21 +110,21 @@ def serialize_ex(node, mode):
                else '&amp "quot \'apos <lt >gt'
 
     # text node
-    if isinstance(node, str) or isinstance(node, unicode): 
+    if isinstance(node, str):
         for r in entities.split(' '):
             node = node.replace(r[0], '&'+r[1:]+';')
         return node
 
     # text node
-    elif isinstance(node, long) or isinstance(node, int): 
+    elif isinstance(node, int):
         return str(node)
 
     # attribute node
-    elif isinstance(node, tuple): 
+    elif isinstance(node, tuple):
         return '%s="%s"' % (node[0], serialize_ex(node[1], mode))
 
     # element node
-    if isinstance(node, list) and (isinstance(node[0], str) or isinstance(node[0], unicode)):
+    if isinstance(node, list) and isinstance(node[0], str):
         name = node[0]
         nodes = [ (isinstance(n, tuple), serialize_ex(n, mode)) for n in node[1:] if n ]
         attrs = ' '.join(n for (isattr, n) in nodes if isattr)
